@@ -1,4 +1,15 @@
 <!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -93,7 +104,7 @@
       <button type="submit" class="btn btn-primary btn-block">تسجيل الدخول</button>
     </form>
     <div class="modal-footer">
-      <p>ليس لديك حساب؟ <a href="#" onclick="switchToSignup()">إنشاء حساب جديد</a></p>
+      <p>ليس لديك حساب؟ <a href="#" onclick="switchToSignup(); return false;">إنشاء حساب جديد</a></p>
     </div>
   </div>
 </div>
@@ -125,7 +136,7 @@
       <button type="submit" class="btn btn-primary btn-block">إنشاء حساب</button>
     </form>
     <div class="modal-footer">
-      <p>لديك حساب بالفعل؟ <a href="#" onclick="switchToLogin()">تسجيل الدخول</a></p>
+      <p>لديك حساب بالفعل؟ <a href="#" onclick="switchToLogin(); return false;">تسجيل الدخول</a></p>
     </div>
   </div>
 </div>
@@ -402,4 +413,9 @@
 <!-- ملف الجافاسكريبت -->
 <script src="script.js"></script>
 </body>
+</html>
+    <script  src="./script.js"></script>
+
+  </body>
+  
 </html>

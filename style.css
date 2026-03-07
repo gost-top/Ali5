@@ -797,9 +797,16 @@ ul { list-style: none; }
   font-size: 0.9rem;
   font-weight: 700;
   transition: var(--transition-normal);
+  cursor: pointer;
+  border: 2px solid transparent;
 }
 
-.book-download:hover { background: transparent; border: 2px solid var(--color-gold); color: var(--color-gold); transform: scale(1.05); }
+.book-download:hover { 
+  background: transparent; 
+  border: 2px solid var(--color-gold); 
+  color: var(--color-gold); 
+  transform: scale(1.05); 
+}
 
 /* ===== 11. مراحل الفيديوهات ===== */
 .stage-selector { display: flex; justify-content: center; gap: var(--space-md); flex-wrap: wrap; margin-bottom: var(--space-xl); }
