@@ -4,7 +4,6 @@
    ============================================ */
 
 const App = {
-  currentUser: null,
   books: []
 };
 
@@ -12,187 +11,66 @@ document.addEventListener('DOMContentLoaded', () => {
   initApp();
   setupEventListeners();
   renderBooks();
-  loadUserFromStorage();
   setupScrollHandler();
+  setupMobileMenu();
 });
 
 function initApp() {
   console.log('✅ تم تحميل التطبيق بنجاح');
 }
 
-// ===== إدارة النماذج =====
-function showLoginForm() {
-  closeModal();
-  document.getElementById('loginModal').style.display = 'block';
-  document.getElementById('modalOverlay').style.display = 'block';
-  document.body.style.overflow = 'hidden';
-}
-
-function showSignupForm() {
-  closeModal();
-  document.getElementById('signupModal').style.display = 'block';
-  document.getElementById('modalOverlay').style.display = 'block';
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-  document.getElementById('loginModal').style.display = 'none';
-  document.getElementById('signupModal').style.display = 'none';
-  document.getElementById('modalOverlay').style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-function switchToSignup() {
-  document.getElementById('loginModal').style.display = 'none';
-  document.getElementById('signupModal').style.display = 'block';
-}
-
-function switchToLogin() {
-  document.getElementById('signupModal').style.display = 'none';
-  document.getElementById('loginModal').style.display = 'block';
-}
-
-// ===== إدارة المستخدمين =====
-function loadUserFromStorage() {
-  try {
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-      App.currentUser = JSON.parse(savedUser);
-      updateAuthUI();
-    }
-  } catch (error) {
-    console.error('❌ خطأ في تحميل المستخدم:', error);
-    localStorage.removeItem('currentUser');
-  }
-}
-
-function saveUserToStorage(user) {
-  App.currentUser = user;
-  const { password, ...safeUser } = user;
-  localStorage.setItem('currentUser', JSON.stringify(safeUser));
-  updateAuthUI();
-  closeModal();
-  showToast(`مرحباً ${user.name} 👋`, 'success');
-}
-
-function handleLogin(event) {
-  event.preventDefault();
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
-  
-  // محاكاة تسجيل الدخول
-  const users = JSON.parse(localStorage.getItem('users') || '[]');
-  const user = users.find(u => u.email === email && u.password === password);
-  
-  if (user) {
-    saveUserToStorage(user);
-    document.getElementById('loginForm').reset();
-  } else {
-    showToast('❌ البريد الإلكتروني أو كلمة المرور غير صحيحة', 'error');
-  }
-}
-
-function handleSignup(event) {
-  event.preventDefault();
-  const name = document.getElementById('signupName').value;
-  const email = document.getElementById('signupEmail').value;
-  const password = document.getElementById('signupPassword').value;
-  const confirmPassword = document.getElementById('signupConfirmPassword').value;
-  
-  if (password !== confirmPassword) {
-    showToast('❌ كلمة المرور غير متطابقة', 'error');
-    return;
-  }
-  
-  const users = JSON.parse(localStorage.getItem('users') || '[]');
-  
-  if (users.some(u => u.email === email)) {
-    showToast('❌ البريد الإلكتروني موجود بالفعل', 'error');
-    return;
-  }
-  
-  const newUser = { name, email, password };
-  users.push(newUser);
-  localStorage.setItem('users', JSON.stringify(users));
-  saveUserToStorage(newUser);
-  document.getElementById('signupForm').reset();
-}
-
-function logout() {
-  App.currentUser = null;
-  localStorage.removeItem('currentUser');
-  updateAuthUI();
-  showToast('تم تسجيل الخروج بنجاح ✓', 'success');
-}
-
-function updateAuthUI() {
-  const authSection = document.getElementById('authSection');
-  const userSection = document.getElementById('userSection');
-  
-  if (App.currentUser) {
-    authSection.style.display = 'none';
-    userSection.style.display = 'flex';
-    document.getElementById('userNameDisplay').textContent = App.currentUser.name || 'مستخدم';
-    const firstLetter = (App.currentUser.name || 'U').charAt(0);
-    document.getElementById('userAvatar').src = `1.jpg`;
-  } else {
-    authSection.style.display = 'flex';
-    userSection.style.display = 'none';
-  }
-}
-
-// ===== التنقل =====
+// ===== التنقل بين الصفحات =====
 function hideAllPages() {
-  document.querySelectorAll('.page-section').forEach(page => page.hidden = true);
-  document.querySelectorAll('#homeSection').forEach(section => section.classList.remove('hidden'));
+  const booksPage = document.getElementById('books-page');
+  const videosPage = document.getElementById('videos-page');
+  const homeSections = document.querySelectorAll('#homeSection');
+  
+  if (booksPage) booksPage.hidden = true;
+  if (videosPage) videosPage.hidden = true;
+  homeSections.forEach(section => section.classList.remove('hidden'));
+  
   document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+}
+
+function showHomePage() {
+  hideAllPages();
+  const homeLink = document.querySelector('.nav-link[onclick*="showHomePage"]');
+  if (homeLink) homeLink.classList.add('active');
+  document.title = 'علي النجار – أستاذ اللغة الإنجليزية';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function showPage(pageName) {
-  hideAllPages();
-  document.querySelectorAll('#homeSection').forEach(section => section.classList.add('hidden'));
-  const targetPage = document.getElementById(`${pageName}-page`);
-  if (targetPage) {
-    targetPage.hidden = false;
-    updatePageTitle(pageName);
-  }
-  document.querySelectorAll('.nav-link').forEach(link => {
-    if (link.getAttribute('onclick')?.includes(pageName)) link.classList.add('active');
-  });
-}
-
-function showStage(stageName) {
-  hideAllPages();
-  document.querySelectorAll('#homeSection').forEach(section => section.classList.add('hidden'));
-  const videosPage = document.getElementById('videos-page');
-  if (videosPage) {
-    videosPage.hidden = false;
-    updatePageTitle('videos');
-  }
-  document.querySelectorAll('.stage-content').forEach(stage => stage.hidden = true);
-  const targetStage = document.getElementById(`${stageName}-stage`);
-  if (targetStage) targetStage.hidden = false;
-  updatePageTitle('videos');
-}
-
-function goHome() {
-  hideAllPages();
-  updatePageTitle('home');
+function showBooksPage() {
+  const booksPage = document.getElementById('books-page');
+  const homeSections = document.querySelectorAll('#homeSection');
+  
+  if (booksPage) booksPage.hidden = false;
+  homeSections.forEach(section => section.classList.add('hidden'));
+  
   document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-  document.querySelector('.nav-link:first-child')?.classList.add('active');
+  const booksLink = document.querySelector('.nav-link[onclick*="showBooksPage"]');
+  if (booksLink) booksLink.classList.add('active');
+  
+  document.title = 'مكتبة الكتب - علي النجار';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function updatePageTitle(pageName) {
-  const titles = {
-    home: 'علي النجار – أستاذ اللغة الإنجليزية',
-    books: 'مكتبة الكتب - علي النجار',
-    videos: 'فيديوهات الشرح - علي النجار'
-  };
-  document.title = titles[pageName] || titles.home;
+function showVideosPage() {
+  const videosPage = document.getElementById('videos-page');
+  const homeSections = document.querySelectorAll('#homeSection');
+  
+  if (videosPage) videosPage.hidden = false;
+  homeSections.forEach(section => section.classList.add('hidden'));
+  
+  document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+  const videosLink = document.querySelector('.nav-link[onclick*="showVideosPage"]');
+  if (videosLink) videosLink.classList.add('active');
+  
+  document.title = 'فيديوهات الشرح - علي النجار';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ===== القائمة الجانبية =====
+// ===== القائمة الجانبية للجوال =====
 function setupMobileMenu() {
   const menuBtn = document.getElementById('mobileMenuBtn');
   const closeBtn = document.getElementById('closeSidebar');
@@ -202,20 +80,24 @@ function setupMobileMenu() {
   if (!menuBtn) return;
   
   menuBtn.addEventListener('click', () => {
-    sidebar.classList.add('active');
-    overlay.classList.add('active');
+    if (sidebar) sidebar.classList.add('active');
+    if (overlay) overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   });
   
-  closeBtn.addEventListener('click', closeMobileMenu);
-  overlay.addEventListener('click', closeMobileMenu);
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeMobileMenu);
+  }
+  if (overlay) {
+    overlay.addEventListener('click', closeMobileMenu);
+  }
 }
 
 function closeMobileMenu() {
   const sidebar = document.getElementById('mobileSidebar');
   const overlay = document.getElementById('sidebarOverlay');
-  sidebar.classList.remove('active');
-  overlay.classList.remove('active');
+  if (sidebar) sidebar.classList.remove('active');
+  if (overlay) overlay.classList.remove('active');
   document.body.style.overflow = '';
 }
 
@@ -257,7 +139,6 @@ function renderBooks(filter = 'all') {
     : App.books.filter(book => book.level === filter);
   
   grid.innerHTML = filteredBooks.map((book, index) => {
-    // تحديد الصف الدراسي بناءً على العنوان
     let gradeText = '';
     if (book.title.includes('الأول')) gradeText = 'الصف الأول';
     else if (book.title.includes('الثاني')) gradeText = 'الصف الثاني';
@@ -281,6 +162,8 @@ function renderBooks(filter = 'all') {
 
 function setupBookFilters() {
   const filterBtns = document.querySelectorAll('.filter-btn');
+  if (!filterBtns.length) return;
+  
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
@@ -290,43 +173,7 @@ function setupBookFilters() {
   });
 }
 
-// ===== الإشعارات =====
-function showToast(message, type = 'info') {
-  const existing = document.getElementById('toast-notification');
-  if (existing) existing.remove();
-  
-  const icons = { success: '✓', error: '✕', info: 'ℹ', warning: '⚠' };
-  const colors = { success: '#28a745', error: '#dc3545', info: '#17a2b8', warning: '#ffc107' };
-  
-  const toast = document.createElement('div');
-  toast.id = 'toast-notification';
-  toast.style.cssText = `
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    background: ${colors[type] || colors.info}; color: white;
-    padding: 14px 28px; border-radius: 50px; font-weight: 600; font-size: 1rem;
-    z-index: 3000; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    animation: slideUp 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
-    display: flex; align-items: center; gap: 10px; max-width: 90vw; text-align: center;
-    font-family: 'Tajawal', sans-serif;
-  `;
-  
-  toast.innerHTML = `<span style="font-size:1.3em">${icons[type] || icons.info}</span> ${message}`;
-  
-  if (!document.getElementById('toast-animations')) {
-    const style = document.createElement('style');
-    style.id = 'toast-animations';
-    style.textContent = `
-      @keyframes slideUp { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-      @keyframes fadeOut { to { opacity: 0; transform: translateX(-50%) translateY(-20px); } }
-    `;
-    document.head.appendChild(style);
-  }
-  
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-}
-
-// ===== أدوات إضافية =====
+// ===== زر الصعود للأعلى =====
 function setupScrollHandler() {
   const scrollTopBtn = document.getElementById('scrollTopBtn');
   if (!scrollTopBtn) return;
@@ -340,37 +187,22 @@ function setupScrollHandler() {
 }
 
 function setupEventListeners() {
-  const logoutBtn = document.getElementById('logoutBtn');
-  if (logoutBtn) logoutBtn.addEventListener('click', logout);
-  setupMobileMenu();
   setupBookFilters();
-  
-  // إغلاق النماذج عند الضغط على Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
 }
 
 // ===== تصدير الدوال إلى النطاق العام =====
-window.showPage = showPage;
-window.showStage = showStage;
-window.goHome = goHome;
-window.showLoginForm = showLoginForm;
-window.showSignupForm = showSignupForm;
-window.closeModal = closeModal;
-window.switchToLogin = switchToLogin;
-window.switchToSignup = switchToSignup;
-window.handleLogin = handleLogin;
-window.handleSignup = handleSignup;
+window.showHomePage = showHomePage;
+window.showBooksPage = showBooksPage;
+window.showVideosPage = showVideosPage;
 window.closeMobileMenu = closeMobileMenu;
 
 console.log(`
 ╔════════════════════════════════════════╗
 ║   موقع الأستاذ علي النجار             ║
-║   للإشارة باللغة الإنجليزية           ║
+║   معلم اللغة الإنجليزية               ║
 ╠════════════════════════════════════════╣
-║   الإصدار: 3.2 (كامل)                 ║
+║   الإصدار: 4.0 (بدون تسجيل دخول)      ║
 ║   الكتب: ابتدائي 6 | إعدادي 3 | ثانوي 3║
-║   الحالة: جميع الأزرار تعمل            ║
+║   الفيديوهات: إعدادي | ثانوي          ║
 ╚════════════════════════════════════════╝
 `);

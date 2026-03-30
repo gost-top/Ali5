@@ -1,24 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <title>Ali Elngar</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="icon" type="image/x-icon" href="Ali.ico">
-
-
-  </head>
-    
-  <body>
-  <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta name="description" content="الموقع الرسمي للأستاذ علي النجار - معلم اللغة الإنجليزية">
   <meta name="theme-color" content="#0a2538">
-  
   <title>علي النجار – أستاذ اللغة الإنجليزية</title>
   
   <!-- Font Awesome 6 -->
@@ -37,7 +23,7 @@
 <header class="main-header">
   <div class="header-container">
     <div class="logo-section">
-      <a href="#" class="logo" onclick="goHome(); return false;">
+      <a href="index.html" class="logo">
         <i class="fas fa-graduation-cap"></i>
         <span>علي النجار</span>
       </a>
@@ -45,102 +31,22 @@
     </div>
     
     <nav class="main-nav" id="mainNav">
-      <a href="#" onclick="goHome(); return false;" class="nav-link active">
+      <a href="#" onclick="showHomePage(); return false;" class="nav-link active">
         <i class="fas fa-home"></i> الرئيسية
       </a>
-      <a href="#" onclick="showPage('books'); return false;" class="nav-link">
+      <a href="#" onclick="showBooksPage(); return false;" class="nav-link">
         <i class="fas fa-book"></i> الكتب
       </a>
-      <a href="#" onclick="showPage('videos'); return false;" class="nav-link">
+      <a href="#" onclick="showVideosPage(); return false;" class="nav-link">
         <i class="fas fa-video"></i> الفيديوهات
       </a>
     </nav>
-    
-    <div class="auth-section" id="authSection">
-      <a href="#" onclick="showLoginForm(); return false;" class="btn btn-login">
-        <i class="fas fa-sign-in-alt"></i>
-        <span>تسجيل الدخول</span>
-      </a>
-      <a href="#" onclick="showSignupForm(); return false;" class="btn btn-signup">
-        <i class="fas fa-user-plus"></i>
-        <span>حساب جديد</span>
-      </a>
-    </div>
-    <div class="user-section" id="userSection" style="display:none;">
-      <div class="user-avatar">
-       </div>
-      <div class="user-details">
-        <span class="user-name" id="userNameDisplay">مستخدم<span>
-        <button class="btn-logout" id="logoutBtn" title="تسجيل الخروج">
-          <i class="fas fa-sign-out-alt"></i>
-        </button>
-      </div>
-    </div>
     
     <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="القائمة">
       <i class="fas fa-bars"></i>
     </button>
   </div>
 </header>
-
-<!-- ===== نماذج تسجيل الدخول وحساب جديد ===== -->
-<div class="modal-overlay" id="modalOverlay" style="display:none;" onclick="closeModal()"></div>
-
-<!-- نموذج تسجيل الدخول -->
-<div class="modal" id="loginModal" style="display:none;">
-  <div class="modal-header">
-    <h3><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</h3>
-    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="modal-body">
-    <form id="loginForm" onsubmit="handleLogin(event)">
-      <div class="form-group">
-        <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
-        <input type="email" id="loginEmail" placeholder="أدخل بريدك الإلكتروني" required>
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-lock"></i> كلمة المرور</label>
-        <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" required>
-      </div>
-      <button type="submit" class="btn btn-primary btn-block">تسجيل الدخول</button>
-    </form>
-    <div class="modal-footer">
-      <p>ليس لديك حساب؟ <a href="#" onclick="switchToSignup(); return false;">إنشاء حساب جديد</a></p>
-    </div>
-  </div>
-</div>
-
-<!-- نموذج إنشاء حساب جديد -->
-<div class="modal" id="signupModal" style="display:none;">
-  <div class="modal-header">
-    <h3><i class="fas fa-user-plus"></i> إنشاء حساب جديد</h3>
-    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="modal-body">
-    <form id="signupForm" onsubmit="handleSignup(event)">
-      <div class="form-group">
-        <label><i class="fas fa-user"></i> الاسم الكامل</label>
-        <input type="text" id="signupName" placeholder="أدخل اسمك الكامل" required>
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
-        <input type="email" id="signupEmail" placeholder="أدخل بريدك الإلكتروني" required>
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-lock"></i> كلمة المرور</label>
-        <input type="password" id="signupPassword" placeholder="أدخل كلمة المرور" required>
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-lock"></i> تأكيد كلمة المرور</label>
-        <input type="password" id="signupConfirmPassword" placeholder="أعد إدخال كلمة المرور" required>
-      </div>
-      <button type="submit" class="btn btn-primary btn-block">إنشاء حساب</button>
-    </form>
-    <div class="modal-footer">
-      <p>لديك حساب بالفعل؟ <a href="#" onclick="switchToLogin(); return false;">تسجيل الدخول</a></p>
-    </div>
-  </div>
-</div>
 
 <!-- ===== القائمة الجانبية للجوال ===== -->
 <div class="mobile-sidebar" id="mobileSidebar">
@@ -151,11 +57,9 @@
     </button>
   </div>
   <nav class="sidebar-nav">
-    <a href="#" onclick="goHome(); closeMobileMenu(); return false;"><i class="fas fa-home"></i> الرئيسية</a>
-    <a href="#" onclick="showPage('books'); closeMobileMenu(); return false;"><i class="fas fa-book"></i> الكتب</a>
-    <a href="#" onclick="showPage('videos'); closeMobileMenu(); return false;"><i class="fas fa-video"></i> الفيديوهات</a>
-    <a href="#" onclick="showLoginForm(); closeMobileMenu(); return false;"><i class="fas fa-sign-in-alt"></i> الدخول</a>
-    <a href="#" onclick="showSignupForm(); closeMobileMenu(); return false;"><i class="fas fa-user-plus"></i> حساب جديد</a>
+    <a href="#" onclick="showHomePage(); closeMobileMenu(); return false;"><i class="fas fa-home"></i> الرئيسية</a>
+    <a href="#" onclick="showBooksPage(); closeMobileMenu(); return false;"><i class="fas fa-book"></i> الكتب</a>
+    <a href="#" onclick="showVideosPage(); closeMobileMenu(); return false;"><i class="fas fa-video"></i> الفيديوهات</a>
   </nav>
 </div>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -196,11 +100,11 @@
       </p>
       
       <div class="hero-actions">
-        <a href="#" onclick="showPage('books'); return false;" class="btn btn-primary btn-lg">
+        <a href="#" onclick="showBooksPage(); return false;" class="btn btn-primary btn-lg">
           <i class="fas fa-download"></i>
           تصفح الكتب
         </a>
-        <a href="#" onclick="showPage('videos'); return false;" class="btn btn-outline btn-lg">
+        <a href="#" onclick="showVideosPage(); return false;" class="btn btn-outline btn-lg">
           <i class="fas fa-play"></i>
           شاهد الدروس
         </a>
@@ -263,7 +167,7 @@
 <main class="main-content" id="homeSection">
   <div class="container">
     <div class="choices-section">
-      <button class="choice-card" onclick="showPage('books')">
+      <a href="#" onclick="showBooksPage(); return false;" class="choice-card">
         <div class="card-image-wrapper">
           <img src="كتب.jpg" alt="الكتب" class="card-image" loading="lazy">
           <div class="card-overlay">
@@ -275,9 +179,9 @@
           <p>مكتبة شاملة من 12 كتاباً تعليمياً</p>
           <span class="card-tag">مجاني</span>
         </div>
-      </button>
+      </a>
       
-      <button class="choice-card" onclick="showPage('videos')">
+      <a href="#" onclick="showVideosPage(); return false;" class="choice-card">
         <div class="card-image-wrapper">
           <img src="فيديوهات.jpg" alt="الفيديوهات" class="card-image" loading="lazy">
           <div class="card-overlay">
@@ -286,10 +190,10 @@
         </div>
         <div class="card-content">
           <h2><i class="fas fa-play-circle"></i> فيديوهات الشرح</h2>
-          <p>دروس مصوّرة لجميع المراحل الدراسية</p>
+          <p>دروس مصوّرة للمراحل الإعدادية والثانوية</p>
           <span class="card-tag">جديد</span>
         </div>
-      </button>
+      </a>
     </div>
   </div>
 </main>
@@ -298,7 +202,7 @@
 <section class="page-section" id="books-page" hidden>
   <div class="page-container">
     <div class="page-header">
-      <button class="back-button" onclick="goHome()">
+      <button class="back-button" onclick="showHomePage()">
         <i class="fas fa-arrow-right"></i>
         <span>العودة للرئيسية</span>
       </button>
@@ -326,7 +230,7 @@
 <section class="page-section" id="videos-page" hidden>
   <div class="page-container">
     <div class="page-header">
-      <button class="back-button" onclick="goHome()">
+      <button class="back-button" onclick="showHomePage()">
         <i class="fas fa-arrow-right"></i>
         <span>العودة للرئيسية</span>
       </button>
@@ -338,43 +242,14 @@
     </div>
     
     <div class="stage-selector">
-      <button class="stage-btn" onclick="showStage('primary')">
-        <i class="fas fa-child"></i>
-        <span>المرحلة الابتدائية</span>
-      </button>
-      <button class="stage-btn" onclick="showStage('middle')">
+      <a href="videos-middle.html" class="stage-btn">
         <i class="fas fa-user-graduate"></i>
         <span>المرحلة الإعدادية</span>
-      </button>
-      <button class="stage-btn" onclick="showStage('high')">
+      </a>
+      <a href="videos-high.html" class="stage-btn">
         <i class="fas fa-university"></i>
         <span>المرحلة الثانوية</span>
-      </button>
-    </div>
-    
-    <!-- صفحات المراحل فارغة -->
-    <div class="stage-content" id="primary-stage" hidden>
-      <div class="empty-state">
-        <i class="fas fa-video-slash"></i>
-        <h3>لا توجد فيديوهات حالياً</h3>
-        <p>سيتم إضافة محتوى قريباً</p>
-      </div>
-    </div>
-    
-    <div class="stage-content" id="middle-stage" hidden>
-      <div class="empty-state">
-        <i class="fas fa-video-slash"></i>
-        <h3>لا توجد فيديوهات حالياً</h3>
-        <p>سيتم إضافة محتوى قريباً</p>
-      </div>
-    </div>
-    
-    <div class="stage-content" id="high-stage" hidden>
-      <div class="empty-state">
-        <i class="fas fa-video-slash"></i>
-        <h3>لا توجد فيديوهات حالياً</h3>
-        <p>سيتم إضافة محتوى قريباً</p>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -414,9 +289,4 @@
 <!-- ملف الجافاسكريبت -->
 <script src="script.js"></script>
 </body>
-</html>
-    <script  src="./script.js"></script>
-
-  </body>
-  
 </html>
