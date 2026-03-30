@@ -16,6 +16,151 @@
 
   <!-- ملف الـ CSS -->
   <link rel="stylesheet" href="style.css">
+  
+  <style>
+    /* تنسيقات إضافية للصفوف والبحث */
+    .grade-tabs {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-xl);
+    }
+    
+    .grade-tab {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      border-radius: var(--radius-full);
+      background: var(--color-white);
+      border: 2px solid rgba(201,161,75,0.2);
+      color: var(--color-blue-deep);
+      font-weight: 700;
+      font-size: 1rem;
+      transition: var(--transition-slow);
+      cursor: pointer;
+    }
+    
+    .grade-tab i {
+      color: var(--color-gold);
+      font-size: 1.1rem;
+    }
+    
+    .grade-tab:hover {
+      background: var(--color-gold-light);
+      border-color: var(--color-gold);
+      transform: translateY(-2px);
+    }
+    
+    .grade-tab.active {
+      background: var(--color-gold);
+      border-color: var(--color-gold);
+      color: var(--color-blue-deep);
+    }
+    
+    .grade-tab.active i {
+      color: var(--color-blue-deep);
+    }
+    
+    /* شريط البحث */
+    .search-container {
+      max-width: 500px;
+      margin: 0 auto var(--space-xl);
+    }
+    
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--color-white);
+      border: 2px solid rgba(201,161,75,0.2);
+      border-radius: var(--radius-full);
+      padding: 5px 5px 5px 20px;
+      transition: var(--transition-normal);
+    }
+    
+    .search-box:focus-within {
+      border-color: var(--color-gold);
+      box-shadow: var(--shadow-gold);
+    }
+    
+    .search-box input {
+      flex: 1;
+      border: none;
+      padding: 12px 0;
+      font-size: 1rem;
+      font-family: var(--font-primary);
+      background: transparent;
+      outline: none;
+    }
+    
+    .search-box input::placeholder {
+      color: var(--color-gray-medium);
+    }
+    
+    .search-box button {
+      background: var(--color-gold);
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius-full);
+      color: var(--color-blue-deep);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-normal);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .search-box button:hover {
+      background: var(--color-gold-dark);
+      transform: scale(1.02);
+    }
+    
+    /* حالة عدم وجود فيديوهات */
+    .empty-videos {
+      text-align: center;
+      padding: var(--space-2xl);
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      border: 2px dashed rgba(201,161,75,0.3);
+      margin-top: var(--space-lg);
+    }
+    
+    .empty-videos i {
+      font-size: 4rem;
+      color: var(--color-gray-medium);
+      margin-bottom: var(--space-md);
+      opacity: 0.5;
+    }
+    
+    .empty-videos h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--color-blue-deep);
+      margin-bottom: var(--space-xs);
+    }
+    
+    .empty-videos p {
+      color: var(--color-gray-medium);
+      font-size: 1rem;
+    }
+    
+    .grade-content {
+      display: none;
+    }
+    
+    .grade-content.active {
+      display: block;
+    }
+    
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+  </style>
 </head>
 <body>
 
@@ -79,93 +224,70 @@
       <p class="page-description">فيديوهات شرح منهج اللغة الإنجليزية للمرحلة الثانوية (نظام حديث)</p>
     </div>
     
-    <div class="videos-grid">
-      <!-- الصف الأول الثانوي -->
-      <div class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="شرح الوحدة الأولى - الصف الأول الثانوي">
-          <div class="play-overlay">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="video-info">
-          <h3>شرح الوحدة الأولى - الصف الأول الثانوي</h3>
-          <p>شرح قواعد الوحدة الأولى والمفردات الجديدة</p>
-          <span class="video-duration"><i class="fas fa-clock"></i> 58:30</span>
-        </div>
+    <!-- شريط البحث -->
+    <div class="search-container">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍 ابحث عن فيديو... (عنوان الدرس أو الصف)">
+        <button id="searchBtn">
+          <i class="fas fa-search"></i>
+          بحث
+        </button>
       </div>
-      
-      <div class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="شرح قواعد جرامر - الصف الأول الثانوي">
-          <div class="play-overlay">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="video-info">
-          <h3>شرح قواعد جرامر - الصف الأول الثانوي</h3>
-          <p>شرح شامل لقواعد المنهج مع أمثلة تطبيقية</p>
-          <span class="video-duration"><i class="fas fa-clock"></i> 1:05:00</span>
-        </div>
+    </div>
+    
+    <!-- أزرار اختيار الصفوف -->
+    <div class="grade-tabs">
+      <button class="grade-tab active" data-grade="first-secondary">
+        <i class="fas fa-star"></i>
+        الصف الأول الثانوي
+      </button>
+      <button class="grade-tab" data-grade="second-secondary">
+        <i class="fas fa-star-of-life"></i>
+        الصف الثاني الثانوي
+      </button>
+      <button class="grade-tab" data-grade="third-secondary">
+        <i class="fas fa-crown"></i>
+        الصف الثالث الثانوي
+      </button>
+    </div>
+    
+    <!-- محتوى الصف الأول الثانوي -->
+    <div id="first-secondary" class="grade-content active">
+      <div class="empty-videos">
+        <i class="fas fa-video-slash"></i>
+        <h3>لا توجد فيديوهات حالياً</h3>
+        <p>سيتم إضافة فيديوهات شرح الصف الأول الثانوي قريباً</p>
+        <p style="margin-top: var(--space-md); font-size: 0.9rem;">
+          <i class="fas fa-bell"></i> اشترك في القائمة البريدية ليصلك كل جديد
+        </p>
       </div>
-      
-      <!-- الصف الثاني الثانوي -->
-      <div class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="شرح الوحدة الأولى - الصف الثاني الثانوي">
-          <div class="play-overlay">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="video-info">
-          <h3>شرح الوحدة الأولى - الصف الثاني الثانوي</h3>
-          <p>شرح النصوص والقواعد مع حل التدريبات</p>
-          <span class="video-duration"><i class="fas fa-clock"></i> 52:00</span>
-        </div>
+      <div id="first-secondary-grid" class="videos-grid" style="display: none;"></div>
+    </div>
+    
+    <!-- محتوى الصف الثاني الثانوي -->
+    <div id="second-secondary" class="grade-content">
+      <div class="empty-videos">
+        <i class="fas fa-video-slash"></i>
+        <h3>لا توجد فيديوهات حالياً</h3>
+        <p>سيتم إضافة فيديوهات شرح الصف الثاني الثانوي قريباً</p>
+        <p style="margin-top: var(--space-md); font-size: 0.9rem;">
+          <i class="fas fa-bell"></i> اشترك في القائمة البريدية ليصلك كل جديد
+        </p>
       </div>
-      
-      <div class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="شرح قواعد المباشر والغير مباشر">
-          <div class="play-overlay">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="video-info">
-          <h3>شرح قواعد المباشر والغير مباشر</h3>
-          <p>شرح مبسط لقاعدة Reported Speech مع تمارين</p>
-          <span class="video-duration"><i class="fas fa-clock"></i> 45:20</span>
-        </div>
+      <div id="second-secondary-grid" class="videos-grid" style="display: none;"></div>
+    </div>
+    
+    <!-- محتوى الصف الثالث الثانوي -->
+    <div id="third-secondary" class="grade-content">
+      <div class="empty-videos">
+        <i class="fas fa-video-slash"></i>
+        <h3>لا توجد فيديوهات حالياً</h3>
+        <p>سيتم إضافة فيديوهات شرح الصف الثالث الثانوي قريباً</p>
+        <p style="margin-top: var(--space-md); font-size: 0.9rem;">
+          <i class="fas fa-bell"></i> اشترك في القائمة البريدية ليصلك كل جديد
+        </p>
       </div>
-      
-      <!-- الصف الثالث الثانوي -->
-      <div class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="مراجعة نهائية - الصف الثالث الثانوي">
-          <div class="play-overlay">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="video-info">
-          <h3>مراجعة نهائية - الصف الثالث الثانوي (الجزء الأول)</h3>
-          <p>مراجعة شاملة على القواعد الهامة للثانوية العامة</p>
-          <span class="video-duration"><i class="fas fa-clock"></i> 1:20:00</span>
-        </div>
-      </div>
-      
-      <div class="video-card">
-        <div class="video-thumbnail">
-          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="مراجعة نهائية - الصف الثالث الثانوي">
-          <div class="play-overlay">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="video-info">
-          <h3>مراجعة نهائية - الصف الثالث الثانوي (الجزء الثاني)</h3>
-          <p>حل النماذج الاسترشادية ومراجعة القصة المقررة</p>
-          <span class="video-duration"><i class="fas fa-clock"></i> 1:35:00</span>
-        </div>
-      </div>
+      <div id="third-secondary-grid" class="videos-grid" style="display: none;"></div>
     </div>
   </div>
 </section>
@@ -202,7 +324,6 @@
   <i class="fas fa-arrow-up"></i>
 </button>
 
-<script src="script.js"></script>
 <script>
   // إعداد زر الصعود للأعلى
   const scrollTopBtn = document.getElementById('scrollTopBtn');
@@ -243,6 +364,108 @@
       document.body.style.overflow = '';
     });
   }
+  
+  // ===== تبديل الصفوف =====
+  const gradeTabs = document.querySelectorAll('.grade-tab');
+  const gradeContents = document.querySelectorAll('.grade-content');
+  
+  gradeTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // إزالة الفئة النشطة من جميع الأزرار
+      gradeTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      // إخفاء جميع المحتويات
+      gradeContents.forEach(content => content.classList.remove('active'));
+      
+      // إظهار المحتوى المحدد
+      const gradeId = tab.getAttribute('data-grade');
+      const activeContent = document.getElementById(gradeId);
+      if (activeContent) {
+        activeContent.classList.add('active');
+      }
+      
+      // تمرير سلس للجزء العلوي من المحتوى
+      setTimeout(() => {
+        document.querySelector('.grade-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    });
+  });
+  
+  // ===== وظيفة البحث =====
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
+  
+  function performSearch() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    
+    if (searchTerm === '') {
+      // إذا كان البحث فارغاً، أظهر رسالة
+      showToast('الرجاء إدخال كلمة للبحث');
+      return;
+    }
+    
+    // محاكاة البحث (لأنه لا توجد فيديوهات حالياً)
+    showToast(`🔍 جاري البحث عن: "${searchTerm}" - سيتم إضافة النتائج قريباً`);
+    
+    // هنا يمكنك لاحقاً إضافة كود البحث الفعلي عندما توجد فيديوهات
+    // مثال:
+    // searchVideos(searchTerm);
+  }
+  
+  searchBtn.addEventListener('click', performSearch);
+  searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      performSearch();
+    }
+  });
+  
+  // دالة عرض إشعار مؤقت
+  function showToast(message) {
+    // إزالة أي إشعار موجود
+    const existingToast = document.querySelector('.custom-toast');
+    if (existingToast) existingToast.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = 'custom-toast';
+    toast.innerHTML = `
+      <i class="fas fa-info-circle"></i>
+      <span>${message}</span>
+    `;
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-gold);
+      color: var(--color-blue-deep);
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 600;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+    `;
+    
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+  
+  // إضافة أنيميشن للتوست
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+    }
+  `;
+  document.head.appendChild(style);
 </script>
 </body>
 </html>
